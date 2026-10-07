@@ -1,0 +1,13 @@
+# Sensitive credentials & environment files
+*.env
+.env
+*.key
+*.pem
+github_tokens.toml
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*~
+*.bak

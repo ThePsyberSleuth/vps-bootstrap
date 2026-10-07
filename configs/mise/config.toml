@@ -1,0 +1,21 @@
+# ~/.config/mise/config.toml
+[tools]
+bat = "latest"
+btop = "latest"
+bun = "latest"
+delta = "latest"
+eza = "latest"
+fzf = "latest"
+"github:can1357/oh-my-pi" = { version = "latest", minimum_release_age = "0s" }
+go = "latest"
+lazygit = "latest"
+neovim = "latest"
+node = "lts"
+pnpm = "latest"
+rust = "latest"
+starship = "latest"
+uv = "latest"
+zoxide = "latest"
+
+[settings.upgrade]
+auto_prune = true

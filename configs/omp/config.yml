@@ -1,0 +1,283 @@
+symbolPreset: nerd
+setupVersion: 2
+providers:
+  shakeSummaryModel: qwen3-1.7b
+  tinyModelDevice: auto
+  tinyModelDtype: auto
+  openai-codex:
+    codeMode: auto
+  autoThinkingMaxEffort: max
+theme:
+  dark: titanium
+  light: light
+memory:
+  backend: mnemopi
+readLineNumbers: true
+read:
+  summarize:
+    prose: false
+  toolResultPreview: true
+lsp:
+  formatOnWrite: true
+  diagnosticsOnEdit: true
+python:
+  kernelMode: session
+renderMermaid:
+  enabled: true
+checkpoint:
+  enabled: true
+github:
+  enabled: true
+async:
+  enabled: true
+tools:
+  speculativeExecution:
+    enabled: false
+  xdev: true
+mcp:
+  notifications: false
+  enableProjectConfig: true
+dev:
+  autoqa: false
+task:
+  isolation:
+    merge: patch
+    commits: ai
+    enabled: true
+  eager: default
+  enableLsp: true
+  maxRecursionDepth: 2
+  showResolvedModelBadge: true
+  agentAdvisor:
+    task: "on"
+  maxConcurrency: 4
+  prewalk: false
+  enableEffort: true
+display:
+  showTokenUsage: true
+  cacheMissMarker: true
+images:
+  blockImages: false
+  describeForTextModels: true
+defaultThinkingLevel: auto
+steeringMode: one-at-a-time
+interruptMode: immediate
+branchSummary:
+  enabled: true
+compaction:
+  idleEnabled: true
+  handoffSaveToDisk: false
+  methodOrder:
+    - snapcompact
+    - remote
+    - soft
+    - handoff
+    - shake
+secrets:
+  enabled: true
+searxng:
+  endpoint: https://priv.au/
+modelRoles:
+  task: coralbricks-ai/glm-5.3-flash-fp4:auto
+  vision: coralbricks-ai/deepseek-v4.1-flash-fast-fp4:auto
+  slow: openai-codex/gpt-6-astra:auto
+  commit: openai-codex/gpt-5.6-luna:auto
+  plan: openai-codex/gpt-6-astra:auto
+  tiny: coralbricks-ai/glm-5.3-flash-fp4:auto
+  advisor: coralbricks-ai/glm-5.3-flash-fp4:auto
+  smol: openai-codex/gpt-6-luna:auto
+  web: web/tinyfish
+  image: openai-codex/gpt-image-1
+  memory: openai-codex/gpt-6-luna:auto
+  judge: typesafe/jev-latest:auto
+  default: google-antigravity/gemini-3.8-flash
+ttsr:
+  contextMode: discard
+browser:
+  screenshotDir: ""
+  headless: true
+  relay: true
+hindsight:
+  scoping: per-project
+  apiUrl: http://localhost:45270
+omitThinking: false
+collab:
+  displayName: developer
+autolearn:
+  enabled: true
+  autoContinue: true
+speech:
+  enabled: false
+edit:
+  mode: hashline
+  fuzzyMatch: true
+snapcompact:
+  toolResults: false
+personality: default
+advisor:
+  enabled: true
+  syncBacklog: "off"
+mnemopi:
+  proactiveLinking: true
+  polyphonicRecall: true
+  enhancedRecall: true
+prewalk:
+  enabled: false
+features:
+  unexpectedStopDetection: smart
+doubleEscapeAction: rewind
+contextPromotion:
+  enabled: true
+shellMinimizer:
+  enabled: true
+  sourceOutlineLevel: default
+error:
+  notify: "on"
+security:
+  enabled: true
+generate_image:
+  enabled: true
+astGrep:
+  enabled: true
+statusLine:
+  transparent: false
+  compactThinkingLevel: true
+  sessionAccent: true
+  contextLine: embedded
+tui:
+  codexResetFireworks: true
+  titleState: true
+  tight: false
+composer:
+  shape: box
+  tokenRate: true
+externalThinking: false
+disabledExtensions:
+  - extension-module:orca-agent-status
+  - extension-module:orca-prefill
+  - extension-module:orca-titlebar-spinner
+  - skill:alc3253-headset-input-diagnosis
+  - skill:athena-agent-skill-config
+  - skill:athena-ai-copilot-governance-contract
+  - skill:athena-automated-timetabling-contract
+  - skill:athena-browser-journey-testing
+  - skill:athena-build-ticket-frontier
+  - skill:athena-canonical-design-doc-layout
+  - skill:athena-connected-client-transport
+  - skill:athena-corpus-section-replacement-safety
+  - skill:athena-finance-first-release-contract
+  - skill:athena-first-release-platform-scope
+  - skill:athena-frontend-quality-ci
+  - skill:athena-frontend-shadcn-preset
+  - skill:athena-one-executable-build-spec
+  - skill:athena-one-gate01-wayfinder
+  - skill:athena-opensis-feature-corpus
+  - skill:athena-platform-experience-contract
+  - skill:athena-portless-local-dev
+  - skill:athena-prd-authority
+  - skill:athena-procurement-finance-authority
+  - skill:athena-profdux-feature-evidence
+  - skill:athena-portless-local-development
+  - skill:athena-school-health-boundary
+  - skill:athena-shadcn-cnfast-preservation
+  - skill:athena-shadcn-monorepo-update
+  - skill:athena-sis-design-corpus
+  - skill:athena-sis-jcodemunch-reference-indexing
+  - skill:athena-sis-local-setup-verification
+  - skill:athena-sis-reference-repo-analysis
+  - skill:athena-ticket-slice-implementation
+  - skill:athena-unified-corpus-integrity
+  - skill:dell-inspiron-7375-fan-diagnosis
+  - skill:diagnose-memory-persistence
+  - skill:dispatch-parallel-subagents-no-git
+  - skill:electrohub-vision-fusion-ticket-boundary
+  - skill:excalidraw-complex-architecture-layout
+  - skill:exhaustive-feature-to-provenance-spec
+  - skill:gh-mise-json-pollution
+  - skill:git-new-private-repo-from-scratch
+  - skill:github-wayfinder-map-render-hygiene
+  - skill:jcodemunch-remote-index-timeout-recovery
+  - skill:landing-page-scaffold
+  - skill:last30days-timeout-recovery
+  - skill:ledja-indexed-code-reuse
+  - skill:ledja-prd-scope
+  - skill:ledja-private-repo-release
+  - skill:ledja-sibill-research-report
+  - skill:ledja-technical-spec-corpus
+  - skill:liberia-market-entry-patterns
+  - skill:liberia-market-index-cleanup
+  - skill:liberia-sector-idea-generation
+  - skill:liberia-solo-saas-bootstrap
+  - skill:lpos-document-authority-and-gate0
+  - skill:lpos-document-layout
+  - skill:lpos-feasibility-gates
+  - skill:lpos-opensource-repo-indexing
+  - skill:lpos-government-alignment
+  - skill:lpos-oss-index-review
+  - skill:lpos-product-analogy-positioning
+  - skill:lpos-product-scope
+  - skill:lpos-technical-spec-corpus
+  - skill:lpos-tipme-integration-review
+  - skill:market-entry-feasibility-research
+  - skill:mcpproxy-catalog-enumeration
+  - skill:mtn-momo-portal-api-scrape
+codexResets:
+  autoRedeem: "no"
+isolation:
+  backend: auto
+terminal:
+  showProgress: false
+proseOnlyThinking: true
+autoResume: false
+extendedContext: true
+speechgen:
+  enabled: false
+computer:
+  enabled: false
+bashInterceptor:
+  enabled: true
+bash:
+  allowCompoundCommands: true
+  direnv: auto
+retry:
+  fallbackChains:
+    web:
+      - web/firecrawl
+      - openai-codex/gpt-5.6-luna
+      - web/parallel
+      - web/perplexity
+      - google/gemini-2.5-flash
+      - web/exa
+      - web/tavily
+      - web/synthetic
+      - web/searxng
+      - google-antigravity/gemini-2.5-flash
+      - anthropic/claude-haiku-4-5
+      - openai-codex/gpt-5.6
+      - openai-codex/gpt-5.5
+      - xai/grok-4.5
+      - xai-oauth/grok-4.5
+      - web/zai
+      - web/jina
+      - web/kagi
+      - web/brave
+      - web/kimi
+      - web/ollama
+      - web/startpage
+      - web/duckduckgo
+      - web/ecosia
+      - web/google
+      - web/mojeek
+      - web/public
+    image:
+      - google-antigravity/gemini-3-pro-image
+      - xai/grok-imagine-image
+      - openai/gpt-image-1
+      - xai-oauth/grok-imagine-image
+      - openrouter/google/gemini-3-pro-image-preview
+      - google/gemini-3-pro-image-preview
+      - deepinfra/black-forest-labs/FLUX-2-pro
+  waitForUsageReset: false
+find:
+  enabled: "on"
+hideThinkingBlock: false

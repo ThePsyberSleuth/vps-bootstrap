@@ -1,0 +1,577 @@
+# ~/.omp/agent/models.yml
+
+providers:
+  omniroute:
+    name: OmniRoute AI
+    baseUrl: https://api.omniroute.example.com/v1
+    apiKey: OMNIROUTE_API_KEY
+    authHeader: true
+    auth: apiKey
+    disableStrictTools: true
+    discovery:
+      type: proxy
+
+  kourier:
+    name: Kourier AI
+    baseUrl: https://api.kourier.sh/v1
+    api: openai-completions
+    apiKey: KOURIER_API_KEY
+    authHeader: true
+    models:
+      - id: deepseek-v4.1-flash
+        name: DeepSeek V4.1 Flash (Kourier)
+        reasoning: true
+        input: [text, image]
+        contextWindow: 262144
+        maxTokens: 16384
+        cost:
+          input: 0
+          output: 0
+          cacheRead: 0
+          cacheWrite: 0
+
+  electronhub-devpass:
+    # ==============================================================
+    # Electron Hub DevPass / Coding Plan
+    #
+    # Lite:  $10/month
+    # Turbo: $40/month
+    #
+    # DevPass is flat-rate. There is no per-token charge.
+    # The 0.5x / 1x / 2x values below are HEADROOM WEIGHTS,
+    # not monetary prices.
+    #
+    # API keys must be DevPass keys: ek-dev-...
+    # ==============================================================
+
+    baseUrl: https://api.electronhub.ai/v1
+    api: openai-completions
+
+    # OMP resolves this as an environment-variable name.
+    apiKey: ELECTRONHUB_DEVPASS_KEY
+    authHeader: true
+    auth: apiKey
+
+    # --------------------------------------------------------------
+    # Electron Hub OpenAI-compatible behavior
+    # --------------------------------------------------------------
+    compat:
+
+      promptCacheSessionHeader: x-session-id
+      # Electron Hub explicitly accepts reasoning_effort.
+      supportsReasoningEffort: true
+      supportsReasoningParams: true
+
+      # Send:
+      #   reasoning_effort: low | medium | high | xhigh
+      thinkingFormat: openai
+
+      # /v1/chat/completions returns:
+      #   reasoning: "..."
+      #   content: "..."
+      reasoningContentField: reasoning
+
+      # Electron Hub documents tool_choice:
+      #   none
+      #   auto
+      supportsToolChoice: true
+
+      # Electron Hub does NOT document:
+      #   required
+      #   forced named-function tool_choice
+      #
+      # OMP will therefore downgrade forced choices to "auto".
+      supportsForcedToolChoice: false
+
+      # Electron Hub's Chat Completions parameter is max_tokens,
+      # not max_completion_tokens.
+      maxTokensField: max_tokens
+
+    models:
+
+      # ============================================================
+      # GLM 5.3 FLASH — DevPass
+      #
+      # Series:       Flash
+      # Headroom:     0.5x
+      # Context:      1M
+      # Quantization: FP8
+      # Input:        Text + Image
+      # Tools:        Yes
+      # Reasoning:    Yes
+      #
+      # Native reasoning_effort:
+      #   low | high | max
+      #
+      # Electron Hub does not document "max" on the wire.
+      # Safe intersection:
+      #   low | high
+      # ============================================================
+      - id: glm-5.3-flash:dev
+        name: GLM 5.3 Flash (DevPass · Flash 0.5x)
+
+        reasoning: true
+        supportsTools: true
+
+        thinking:
+          mode: effort
+          efforts:
+            - low
+            - high
+            - max
+          defaultLevel: high
+
+          # Do not expose :off for an always-thinking GLM model.
+          requiresEffort: true
+
+        input:
+          - text
+          - image
+
+        contextWindow: 1000000
+        maxTokens: 131072
+
+        # Electron Hub does not publish a DevPass-specific maximum
+        # output limit. Do not let OMP invent/send one.
+        # omitMaxOutputTokens: true
+
+        cost:
+          input: 0.15
+          output: 0.50
+          cacheRead: 0.030
+          cacheWrite: 0
+
+
+      # ============================================================
+      # DEEPSEEK V4 FLASH — DevPass
+      #
+      # Series:       Flash
+      # Headroom:     0.5x
+      # Context:      1M
+      # Quantization: NVFP4
+      # Input:        Text
+      # Tools:        Yes
+      # Reasoning:    Yes
+      #
+      # Native reasoning_effort:
+      #   low | high | max
+      #
+      # Native default:
+      #   high
+      #
+      # Electron Hub documented intersection:
+      #   low | high
+      # ============================================================
+      - id: deepseek-v4-flash:dev
+        name: DeepSeek V4 Flash (DevPass · Flash 0.5x)
+
+        reasoning: true
+        supportsTools: true
+
+        thinking:
+          mode: effort
+          efforts:
+            - low
+            - high
+            - max
+          defaultLevel: high
+
+          # DeepSeek can disable thinking through its native
+          # "thinking" control, but this provider card uses
+          # Electron Hub's documented reasoning_effort interface.
+          # Avoid presenting :off as though it were verified.
+          requiresEffort: true
+
+        input:
+          - text
+
+        contextWindow: 1000000
+        maxTokens: 131072
+        # omitMaxOutputTokens: true
+
+        cost:
+          input: 0.12
+          output: 0.20
+          cacheRead: 0.003
+          cacheWrite: 0
+
+        compat:
+          # DeepSeek thinking + tools requires reasoning from
+          # assistant tool-call turns to be preserved.
+          requiresReasoningContentForToolCalls: true
+          requiresAssistantContentForToolCalls: true
+
+      #===============================
+      - id: deepseek-v4.1-flash:dev
+        name: DeepSeek V4.1 Flash (DevPass · Standard 1x)
+
+        reasoning: true
+        supportsTools: true
+
+        thinking:
+          mode: effort
+          efforts:
+            - low
+            - high
+            - max
+          defaultLevel: high
+
+          # DeepSeek can disable thinking through its native
+          # "thinking" control, but this provider card uses
+          # Electron Hub's documented reasoning_effort interface.
+          # Avoid presenting :off as though it were verified.
+          requiresEffort: true
+
+        input:
+          - text
+
+        contextWindow: 1000000
+        maxTokens: 131072
+        # omitMaxOutputTokens: true
+
+        cost:
+          input: 0.15
+          output: 0.6
+          cacheRead: 0.003
+          cacheWrite: 0
+
+        compat:
+          # DeepSeek thinking + tools requires reasoning from
+          # assistant tool-call turns to be preserved.
+          requiresReasoningContentForToolCalls: true
+          requiresAssistantContentForToolCalls: true
+
+      #===============================
+      # ============================================================
+      # DEEPSEEK V4 FLASH 0731 — DevPass
+      #
+      # Series:       Flash
+      # Headroom:     0.5x
+      # Context:      400K
+      # Quantization: FP8 + FP4 / MXFP4 MoE
+      # Input:        Text
+      # Tools:        Yes
+      # Reasoning:    Yes
+      #
+      # Native reasoning_effort:
+      #   low | high | max
+      #
+      # Electron Hub documented intersection:
+      #   low | high
+      # ============================================================
+      - id: deepseek-v4-flash-0731:dev
+        name: DeepSeek V4 Flash 0731 (DevPass · Flash 0.5x)
+
+        reasoning: true
+        supportsTools: true
+
+        thinking:
+          mode: effort
+          efforts:
+            - low
+            - high
+            - max
+          defaultLevel: high
+          requiresEffort: true
+
+        input:
+          - text
+
+        contextWindow: 400000
+        maxTokens: 131072
+        # omitMaxOutputTokens: true
+
+        cost:
+          input: 0.12
+          output: 0.20
+          cacheRead: 0.003
+          cacheWrite: 0
+
+        compat:
+          requiresReasoningContentForToolCalls: true
+          requiresAssistantContentForToolCalls: true
+
+
+      # ============================================================
+      # MiMo V2.5 — DevPass
+      #
+      # Series:       Flash
+      # Headroom:     0.5x
+      # Context:      1M
+      # Quantization: FP8
+      # Input:        Text + Image
+      # Tools:        Yes
+      # Reasoning:    Yes
+      #
+      # Native effort interface:
+      #   none | low | medium | high
+      #
+      # IMPORTANT:
+      # Xiaomi currently maps low/medium/high to the same enabled
+      # reasoning behavior. Fine-grained intensity is not yet
+      # implemented by MiMo V2.5 itself.
+      # ============================================================
+      - id: mimo-v2.5:dev
+        name: MiMo V2.5 (DevPass · Flash 0.5x)
+
+        reasoning: true
+        supportsTools: true
+
+        thinking:
+          mode: effort
+          efforts:
+            - low
+            - medium
+            - high
+          defaultLevel: high
+
+          # Electron Hub has not documented DevPass-specific
+          # translation of OMP :off into MiMo's native
+          # thinking.type=disabled, so keep this conservative.
+          requiresEffort: true
+
+        input:
+          - text
+          - image
+
+        contextWindow: 1000000
+        maxTokens: 131072
+        # omitMaxOutputTokens: true
+
+        cost:
+          input: 0.14
+          output: 0.28
+          cacheRead: 0.0028
+          cacheWrite: 0
+
+        compat:
+          # Xiaomi recommends carrying previous reasoning through
+          # multi-turn tool-call conversations.
+          requiresReasoningContentForToolCalls: true
+
+
+      # ============================================================
+      # QWEN3.8 27B — DevPass
+      #
+      # Series:       Standard
+      # Headroom:     1x
+      # Context:      262K
+      # Quantization: BF16
+      # Input:        Text + Image
+      # Tools:        Yes
+      # Reasoning:    Yes
+      #
+      # Native reasoning_effort:
+      #   low | medium | xhigh
+      #
+      # Native default:
+      #   xhigh
+      # ============================================================
+      - id: qwen3.8-27b:dev
+        name: Qwen3.8 27B (DevPass · Standard 1x)
+
+        reasoning: true
+        supportsTools: true
+
+        thinking:
+          mode: effort
+          efforts:
+            - low
+            - medium
+            - xhigh
+          defaultLevel: xhigh
+
+          # Qwen can natively enter non-thinking mode through a
+          # different enable_thinking control. Do not claim that
+          # Electron Hub reasoning_effort:none maps to that unless
+          # Electron Hub documents/tests it for this :dev model.
+          requiresEffort: true
+
+        input:
+          - text
+          - image
+
+        # Qwen's native window is exactly 262,144.
+        # Electron Hub displays this as 262K.
+        contextWindow: 262144
+        maxTokens: 65536
+
+        # omitMaxOutputTokens: true
+
+        cost:
+          input: 0.45
+          output: 3.20
+          cacheRead: 0.050
+          cacheWrite: 0
+
+
+      # ============================================================
+      # MINIMAX M2.7 — DevPass
+      #
+      # Series:       Standard
+      # Headroom:     1x
+      # Context:      180K (Electron Hub DevPass deployment)
+      # Quantization: FP8
+      # Input:        Text
+      # Tools:        Yes
+      # Reasoning:    Yes
+      #
+      # OMP/OpenAI-compatible M2 reasoning interface:
+      #   low | medium | high
+      #
+      # M2 reasoning is mandatory.
+      # ============================================================
+      - id: minimax-m2.7:dev
+        name: MiniMax M2.7 (DevPass · Standard 1x)
+
+        reasoning: true
+        supportsTools: true
+
+        thinking:
+          mode: effort
+          efforts:
+            - low
+            - medium
+            - high
+          defaultLevel: high
+          requiresEffort: true
+
+        input:
+          - text
+
+        contextWindow: 180000
+        maxTokens: 65536
+
+        # omitMaxOutputTokens: true
+
+        cost:
+          input: 0.30
+          output: 1.20
+          cacheRead: 0.060
+          cacheWrite: 0
+
+
+      # ============================================================
+      # GLM 5.3 — DevPass
+      #
+      # Series:       Heavy
+      # Headroom:     2x
+      # Context:      262K (Electron Hub DevPass deployment)
+      # Quantization: FP8
+      # Input:        Text
+      # Tools:        Yes
+      # Reasoning:    Yes
+      #
+      # Native reasoning_effort:
+      #   low | high | max
+      #
+      # Electron Hub documented intersection:
+      #   low | high
+      # ============================================================
+      - id: glm-5.3:dev
+        name: GLM 5.3 (DevPass · Heavy 2x)
+
+        reasoning: true
+        supportsTools: true
+
+        thinking:
+          mode: effort
+          efforts:
+            - low
+            - high
+            - max
+          defaultLevel: high
+          requiresEffort: true
+
+        input:
+          - text
+
+        contextWindow: 262144
+        maxTokens: 65536
+
+        # omitMaxOutputTokens: true
+
+        cost:
+          input: 1.40
+          output: 4.40
+          cacheRead: 0.26
+          cacheWrite: 0
+
+  coralbricks-ai:
+    baseUrl: https://inference.coralbricks.ai/v1
+    api: openai-completions
+
+    # Environment-variable name, not the secret itself.
+    apiKey: CORALBRICKS_API_KEY
+    authHeader: true
+    auth: apiKey
+
+    discovery:
+      type: openai-models-list
+      injectV1: false
+      timeoutMs: 10000
+
+    compat:
+      supportsDeveloperRole: true
+      supportsReasoningEffort: true
+      thinkingFormat: openai
+      promptCacheSessionHeader: x-coral-session
+
+    # Discovery determines availability. These exact-ID overrides pin
+    # metadata and estimates; they are NOT an allowlist or a price feed.
+    # Input modalities and tokenizers remain discovery/catalog-derived.
+    # No explicit thinking ladder is imposed over OMP's catalog policy.
+    modelOverrides:
+      glm-5.3-fp4:
+        name: GLM 5.3
+        # Deployment precision: NVFP4
+        reasoning: true
+        supportsTools: true
+        contextWindow: 1048576
+        maxTokens: 32768
+        cost:
+          input: 1.12
+          output: 4.40
+          cacheRead: 0
+          cacheWrite: 1.68
+
+      glm-5.3-flash-fp4:
+        name: GLM 5.3 Flash
+        # Deployment precision: NVFP4
+        reasoning: true
+        supportsTools: true
+        contextWindow: 1048576
+        maxTokens: 32768
+        cost:
+          input: 0.15
+          output: 0.50
+          cacheRead: 0
+          cacheWrite: 0.23
+
+      gpt-oss-120b:
+        name: gpt-oss-120b
+        # Deployment precision: MXFP4
+        reasoning: true
+        supportsTools: true
+        contextWindow: 131072
+        maxTokens: 32768
+        cost:
+          input: 0.12
+          output: 0.60
+          cacheRead: 0
+          cacheWrite: 0.18
+
+      deepseek-v4.1-flash-fast-fp4:
+        name: DeepSeek V4.1 Flash
+        # Deployment precision: MXFP4
+        reasoning: true
+        supportsTools: true
+        # Apply Coral's documented 1M -> 1048576 convention.
+        contextWindow: 1048576
+        # Retained client cap; not specified by the supplied catalog.
+        maxTokens: 32768
+        cost:
+          input: 0.30
+          output: 1.20
+          cacheRead: 0
+          cacheWrite: 0.09

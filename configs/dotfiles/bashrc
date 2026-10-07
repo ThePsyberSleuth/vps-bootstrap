@@ -1,0 +1,58 @@
+# ~/.bashrc (Managed by vps-bootstrap)
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# History configuration
+HISTCONTROL=ignoreboth
+shopt -s histappend
+HISTSIZE=5000
+HISTFILESIZE=10000
+shopt -s checkwinsize
+
+# Make less more friendly for non-text input files
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# ── Environment & PATH ─────────────────────────
+export EDITOR="nvim"
+export VISUAL="nvim"
+export PAGER="delta"
+export PATH="$HOME/.local/bin:$PATH"
+
+# ── Mise Version Manager (activates runtimes & tools) ──
+if [ -x /usr/local/bin/mise ]; then
+  eval "$(/usr/local/bin/mise activate bash)"
+fi
+
+# Cargo / Rust PATH
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# ── Aliases & Functions ────────────────────────
+if [ -f ~/.bash_aliases ]; then
+  . ~/.bash_aliases
+fi
+
+# ── Shell Integrations & Prompts ───────────────
+if command -v starship &> /dev/null; then
+  eval "$(starship init bash --print-full-init)"
+fi
+
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init bash)"
+fi
+
+if command -v omp &> /dev/null; then
+  eval "$(omp completions bash 2>/dev/null)"
+fi
+
+# Bash completion
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
