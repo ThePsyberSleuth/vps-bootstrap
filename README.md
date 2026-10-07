@@ -229,17 +229,24 @@ Pre-configured in `~/.bash_aliases` and managed via `mise`:
 
 | Command / Alias | Tool | What It Does |
 | :--- | :--- | :--- |
+| `..`, `...`, `....` | **bash** | Rapid directory navigation up 1, 2, or 3 parent levels (`cd ..`) |
+| `cd <dir>` | **zoxide (zd)** | Smart directory jumping based on frequency and recency |
 | `ls`, `ll`, `la`, `lt` | **eza** | Modern directory listings with icons, tree hierarchy, and git status |
 | `cat <file>` | **bat** | Syntax-highlighted viewer with automatic line numbers |
 | `ff` | **fzf + bat** | Interactive fuzzy file finder with live syntax preview |
 | `eff` | **$EDITOR + fzf** | Search and immediately edit the selected file |
-| `cd <dir>` | **zoxide (zd)** | Smart directory jumping based on frequency and recency |
+| `sff <host:path>` | **fzf + scp** | Interactive fuzzy finder to quickly scp a selected file |
 | `lg` | **lazygit** | Full-featured terminal UI for git staging, commits, and rebasing |
+| `ga <branch>` | **git worktree** | Create and check out a parallel feature worktree in one command |
+| `gd` | **git worktree** | Safely remove the current feature worktree and branch |
 | `top` | **btop** | Real-time interactive CPU, memory, disk, and process monitor |
 | `t` | **tmux** | Attach to existing `Work` session or launch a fresh workspace |
 | `cdw`, `cdd`, `cdp` | **bash** | Instant navigation to `~/Work`, `~/Work/dev`, `~/Work/projects` |
 | `mup` | **mise** | Upgrade all developer runtimes and CLI tools (`mise up`) |
-
+| `compress <dir>` | **tar** | Create `.tar.gz` archive with clean directory name |
+| `decompress <tar>` | **tar** | Extract `.tar.gz` archive |
+| `d` | **docker** | Shortcut for `docker` CLI |
+| `n` | **neovim** | Launch LazyVim (`n` opens cwd; `n file` opens file) |
 ---
 
 ## Repository Structure

@@ -1,6 +1,14 @@
-# ~/.bash_aliases
+# ==============================================================================
+# Shell Aliases & Productivity Helpers
+# ==============================================================================
 
-# File system (eza)
+# Directory Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+# File System (eza)
 if command -v eza &> /dev/null; then
   alias ls="eza -lh --group-directories-first --icons=auto"
   alias lsa="ls -a"
@@ -20,6 +28,7 @@ fi
 if command -v fzf &> /dev/null && command -v bat &> /dev/null; then
   alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
   alias eff='$EDITOR "$(ff)"'
+  sff() { if [ $# -eq 0 ]; then echo "Usage: sff <destination> (e.g. sff host:/tmp/)"; return 1; fi; local file; file=$(find . -type f -printf '%T@\t%p\n' | sort -rn | cut -f2- | ff) && [ -n "$file" ] && scp "$file" "$1"; }
 fi
 
 # Zoxide smart directory switching
@@ -41,24 +50,61 @@ if command -v zoxide &> /dev/null; then
   }
 fi
 
-# Navigation
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-
-# Dev & Git
+# Git shortcuts
 alias g="git"
 alias gcm="git commit -m"
 alias gcam="git commit -a -m"
 alias gcad="git commit -a --amend"
 alias lg="lazygit"
+
+# Git Worktree helpers (ga = add worktree, gd = remove worktree)
+ga() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: ga [branch name]"
+    return 1
+  fi
+  local branch="$1"
+  local base="$(basename "$PWD")"
+  local wt_path="../${base}--${branch}"
+  git worktree add -b "$branch" "$wt_path"
+  command -v mise &>/dev/null && mise trust "$wt_path" 2>/dev/null || true
+  cd "$wt_path"
+}
+
+gd() {
+  local cwd base branch root worktree
+  cwd="$(pwd)"
+  worktree="$(basename "$cwd")"
+  root="${worktree%%--*}"
+  branch="${worktree#*--}"
+  if [[ "$root" != "$worktree" ]]; then
+    cd "../$root"
+    git worktree remove "$cwd" --force || return 1
+    git branch -D "$branch"
+  else
+    echo "Error: Not currently inside a recognized worktree (-- delimiter)."
+  fi
+}
+
+# Dev & AI Tools
+alias a='omarchy-agent --inline'
+alias c='opencode --auto'
+alias cx='printf "\033[2J\033[3J\033[H" && claude --permission-mode auto'
+alias cy='codex --approve-for-me'
 alias d="docker"
+alias r="rails"
 alias t="tmux attach || tmux new -s Work"
+alias h="herdr"
 alias top="btop"
+alias mup="MISE_MINIMUM_RELEASE_AGE=0 mise up"
+alias decompress="tar -xzf"
+compress() { tar -czf "${1%/}.tar.gz" "${1%/}"; }
+
+# Neovim launcher
 alias n="nvim"
 n() { if [ "$#" -eq 0 ]; then command nvim . ; else command nvim "$@"; fi; }
 
-# Work directories shortcuts
+# Workspace directory shortcuts
 alias cdw="cd ~/Work"
 alias cdd="cd ~/Work/dev"
 alias cdp="cd ~/Work/projects"

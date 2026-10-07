@@ -292,6 +292,11 @@ sudo -u "$DEV_USER" cp "${SCRIPT_DIR}/configs/dotfiles/tmux.conf" "/home/${DEV_U
 sudo -u "$DEV_USER" cp "${SCRIPT_DIR}/configs/dotfiles/bash_aliases" "/home/${DEV_USER}/.bash_aliases"
 sudo -u "$DEV_USER" cp "${SCRIPT_DIR}/configs/dotfiles/bashrc" "/home/${DEV_USER}/.bashrc"
 
+# Deploy aliases for root and system-wide
+cp "${SCRIPT_DIR}/configs/dotfiles/bash_aliases" /root/.bash_aliases
+cp "${SCRIPT_DIR}/configs/dotfiles/bash_aliases" /etc/profile.d/00-aliases.sh
+chmod 644 /etc/profile.d/00-aliases.sh /root/.bash_aliases
+
 # Git Config
 sudo -u "$DEV_USER" git config --global user.name "$GIT_USER_NAME"
 sudo -u "$DEV_USER" git config --global user.email "$GIT_USER_EMAIL"
